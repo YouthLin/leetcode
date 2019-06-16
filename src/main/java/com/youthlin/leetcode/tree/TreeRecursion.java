@@ -86,7 +86,7 @@ public class TreeRecursion {
             return true;
         }
         List<T> level = new ArrayList<>();
-        return new TreeVisitor().levelFullOrder(root, true,
+        return new TreeVisitor().levelOrder(root, true,
                 node -> level.add(node != null ? node.data : null),
                 levelCount -> {
                     boolean ok = checkLevel(level);

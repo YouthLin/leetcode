@@ -14,33 +14,33 @@ public class TreeBuilder {
         int len = inOrder.length;
         Wrapper<Integer> postEnd = new Wrapper<>();
         postEnd.setData(len);
-        return buildNode(inOrder, 0, len, postOrder, postEnd);
+        return buildNodeInPostOrder(inOrder, 0, len, postOrder, postEnd);
     }
 
     public <T> TreeNode<T> buildTreeViaPreInOrder(T[] preOrder, T[] inOrder) {
         Wrapper<Integer> postIndex = new Wrapper<>();
         postIndex.setData(0);
-        return buildNode(preOrder, inOrder, 0, inOrder.length, postIndex);
+        return buildNodePreInOrder(preOrder, inOrder, 0, inOrder.length, postIndex);
     }
 
     /**
-     * 输入是按层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
+     * 输入是按满二叉树层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
      *
      * @param <T> 结点值类型
      */
-    public <T> TreeNode<T> buildViaLevelOrder(Iterable<T> input) {
-        return buildViaLevelOrder(input, TreeNode::new);
+    public <T> TreeNode<T> buildViaFullLevelOrder(Iterable<T> input) {
+        return buildViaFullLevelOrder(input, TreeNode::new);
     }
 
     /**
-     * 输入是按层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
+     * 输入是按满二叉树层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
      *
      * @param creator 通常可以传入结点类型 N 的默认构造函数
      * @param <T>     结点值类型
      * @param <N>     结点类型
      */
-    public <T, N extends BinTreeNode<T, N>> N buildViaLevelOrder(Iterable<T> input, Supplier<N> creator) {
-        return buildViaLevelOrder(input, t -> {
+    public <T, N extends BinTreeNode<T, N>> N buildViaFullLevelOrder(Iterable<T> input, Supplier<N> creator) {
+        return buildViaFullLevelOrder(input, t -> {
             N n = creator.get();
             n.setData(t);
             return n;
@@ -48,14 +48,14 @@ public class TreeBuilder {
     }
 
     /**
-     * 输入是按层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
+     * 输入是满二叉树按层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
      *
      * @param creator 由结点值 T 构造 结点 N. 通常可以传入结点类型 N 的带参数 data 的构造函数
      * @param <T>     结点值类型
      * @param <N>     结点类型
      */
-    public <T, N extends BinTreeNode<T, N>> N buildViaLevelOrder(Iterable<T> input, Function<T, N> creator) {
-        Iterator<T> iterator = input.iterator();
+    public <I, T, N extends BinTreeNode<T, N>> N buildViaFullLevelOrder(Iterable<I> input, Function<I, N> creator) {
+        Iterator<I> iterator = input.iterator();
         if (!iterator.hasNext()) {
             return null;
         }
@@ -64,7 +64,7 @@ public class TreeBuilder {
         int parentIndex;
         N parent, node;
         while (iterator.hasNext()) {
-            T next = iterator.next();
+            I next = iterator.next();
             if (next == null) {
                 node = null;
             } else {
@@ -86,6 +86,59 @@ public class TreeBuilder {
         return list.get(0);
     }
 
+    /**
+     * 输入是按层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
+     *
+     * @param <T> node value type
+     * @param <N> node type
+     */
+    public <T, N extends BinTreeNode<T, N>> N buildLevelOrder(Iterable<T> input, Supplier<N> creator) {
+        return buildLevelOrder(input, in -> {
+            N node = creator.get();
+            node.setData(in);
+            return node;
+        });
+    }
+
+    /**
+     * 输入是按层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
+     *
+     * @param <I> input value type
+     * @param <T> node value type
+     * @param <N> node type
+     */
+    public <I, T, N extends BinTreeNode<T, N>> N buildLevelOrder(Iterable<I> input, Function<I, N> creator) {
+        Iterator<I> iterator = input.iterator();
+        if (!iterator.hasNext()) {
+            return null;
+        }
+        List<N> list = new ArrayList<>();
+        N parent, node;
+        int parentIndex = 0, index = 0;
+        while (iterator.hasNext()) {
+            I next = iterator.next();
+            if (next == null) {
+                node = null;
+            } else {
+                node = creator.apply(next);
+            }
+            if (node != null) {
+                list.add(node);
+            }
+            if (index > 0) {
+                parent = list.get(parentIndex);
+                if (index % 2 == 1) {
+                    parent.setLeft(node);
+                } else {
+                    parent.setRight(node);
+                    ++parentIndex;
+                }
+            }
+            index++;
+        }
+        return list.get(0);
+    }
+
     private <T> int indexOf(T[] in, T target) {
         int len = in.length;
         for (int i = 0; i < len; i++) {
@@ -96,7 +149,7 @@ public class TreeBuilder {
         return -1;
     }
 
-    private <T> TreeNode<T> buildNode(T[] inOrder, int beg, int end, T[] postOrder, Wrapper<Integer> postEnd) {
+    private <T> TreeNode<T> buildNodeInPostOrder(T[] inOrder, int beg, int end, T[] postOrder, Wrapper<Integer> postEnd) {
         //找根结点
         if (postEnd.getData() <= 0 || beg >= end) {
             return null;
@@ -108,14 +161,14 @@ public class TreeBuilder {
         TreeNode<T> node = new TreeNode<>(inOrder[nodeIndex]);
         postEnd.setData(postEnd.getData() - 1);
         //
-        TreeNode<T> right = buildNode(inOrder, nodeIndex + 1, end, postOrder, postEnd);
-        TreeNode<T> left = buildNode(inOrder, beg, nodeIndex, postOrder, postEnd);
+        TreeNode<T> right = buildNodeInPostOrder(inOrder, nodeIndex + 1, end, postOrder, postEnd);
+        TreeNode<T> left = buildNodeInPostOrder(inOrder, beg, nodeIndex, postOrder, postEnd);
         node.right = right;
         node.left = left;
         return node;
     }
 
-    private <T> TreeNode<T> buildNode(T[] preOrder, T[] inOrder, int beg, int end, Wrapper<Integer> preIndex) {
+    private <T> TreeNode<T> buildNodePreInOrder(T[] preOrder, T[] inOrder, int beg, int end, Wrapper<Integer> preIndex) {
         if (preIndex.getData() >= preOrder.length) {
             return null;
         }
@@ -126,8 +179,8 @@ public class TreeBuilder {
         }
         TreeNode<T> node = new TreeNode<>(val);
         preIndex.setData(preIndex.getData() + 1);
-        node.left = buildNode(preOrder, inOrder, beg, nodeIndex, preIndex);
-        node.right = buildNode(preOrder, inOrder, nodeIndex + 1, end, preIndex);
+        node.left = buildNodePreInOrder(preOrder, inOrder, beg, nodeIndex, preIndex);
+        node.right = buildNodePreInOrder(preOrder, inOrder, nodeIndex + 1, end, preIndex);
         return node;
     }
 

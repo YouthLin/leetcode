@@ -35,7 +35,11 @@ public class TreeBuilderTest {
         System.out.println(root);
 
         Integer[] level = { 3, 5, 1, 6, 2, 0, 8, null, null, 7, 4 };
-        root = builder.buildViaLevelOrder(Arrays.asList(level));
+        root = builder.buildViaFullLevelOrder(Arrays.asList(level));
+        System.out.println(root);
+
+        level = new Integer[] { 5, 2, 3, null, null, 4, 8, 6, 1 };
+        root = builder.buildLevelOrder(Arrays.asList(level), TreeNode::new);
         System.out.println(root);
     }
 

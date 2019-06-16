@@ -15,11 +15,6 @@ public class TreeNodeConnector {
         Node right;
         int offset;
         public Node next;
-
-        Node(Integer val) {
-            data = val;
-        }
-
     }
 
     public Node connect(Node root) {
@@ -29,7 +24,7 @@ public class TreeNodeConnector {
                 pre.getData().next = node;
             }
             pre.setData(node);
-        }, (Consumer<Integer>) level -> pre.setData(null));
+        }, level -> pre.setData(null));
         return root;
     }
 

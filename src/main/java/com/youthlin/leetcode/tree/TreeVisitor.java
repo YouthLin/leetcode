@@ -105,12 +105,11 @@ public class TreeVisitor {
     }
     //endregion post order
 
-
     /**
      * @param onLevelEnd 当每层结束时调用 参数是从 0 编号的层数
      */
     public <T, N extends BinTreeNode<T, N>> void levelOrder(N root, Consumer<N> action, Consumer<Integer> onLevelEnd) {
-        levelFullOrder(root, false, action, levelCount -> {
+        levelOrder(root, false, action, levelCount -> {
             onLevelEnd.accept(levelCount);
             return true;
         });
@@ -120,10 +119,10 @@ public class TreeVisitor {
      * @param root                 树的根结点
      * @param visitNullNode        是否访问 null 结点
      * @param action               访问每个结点
-     * @param shouldVisitNextLevel 是否继续访问下一层
+     * @param shouldVisitNextLevel 是否继续访问下一层 输入是从 0 开始的层数 通常用于每层结束后做一些事 并且允许提前结束遍历
      * @return true 如果完成了所有结点的访问
      */
-    public <T, N extends BinTreeNode<T, N>> boolean levelFullOrder(N root, boolean visitNullNode,
+    public <T, N extends BinTreeNode<T, N>> boolean levelOrder(N root, boolean visitNullNode,
             Consumer<N> action, Predicate<Integer> shouldVisitNextLevel) {
         if (root == null) {
             return false;

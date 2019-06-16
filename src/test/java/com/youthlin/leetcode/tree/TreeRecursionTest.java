@@ -84,7 +84,7 @@ public class TreeRecursionTest extends TreeTestBase {
     public void hasPathSum() {
         System.out.println(test.hasPathSum(root, 22));
         Integer[] level = {3, 5, 1, 6, 2, 0, 8, null, null, 7, 4};
-        root = new TreeBuilder().buildViaLevelOrder(Arrays.asList(level));
+        root = new TreeBuilder().buildViaFullLevelOrder(Arrays.asList(level));
         Assert.assertTrue(test.hasPathSum(root, 17));
         Assert.assertTrue(test.hasPathSum(root, 14));
     }

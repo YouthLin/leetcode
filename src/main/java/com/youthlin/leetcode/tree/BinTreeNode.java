@@ -41,4 +41,8 @@ public interface BinTreeNode<T, N extends BinTreeNode<T, N>> {
         return String.valueOf(getData());
     }
 
+    default int dataWidth() {
+        return printData().length();
+    }
+
 }

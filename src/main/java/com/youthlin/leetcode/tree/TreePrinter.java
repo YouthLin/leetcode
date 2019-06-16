@@ -15,6 +15,11 @@ public class TreePrinter {
     }
 
     public static <T, N extends BinTreeNode<T, N>> String printTree(BinTreeNode<T, N> root, int offset) {
+        return printTree(root, offset, " ", "_", "|");
+    }
+
+    public static <T, N extends BinTreeNode<T, N>> String printTree(BinTreeNode<T, N> root, int offset,
+            String blankChar, String underLineChar, String verticalChar) {
         if (root == null) {
             return "";
         }
@@ -44,7 +49,7 @@ public class TreePrinter {
                      * |
                      * 90
                      * */
-                    if (pre.printData().length() < 2) {
+                    if (pre.dataWidth() < 2) {
                         offset++;
                     }
                 }
@@ -64,7 +69,7 @@ public class TreePrinter {
                     offset++;
                 }
                 current.setOffset(offset);
-                offset += current.printData().length();
+                offset += current.dataWidth();
                 pre = current;
                 current = current.getRight();
             }
@@ -77,7 +82,7 @@ public class TreePrinter {
         q.offer(getEndFlag());
         StringBuilder sb = new StringBuilder();
         int currentOffset = 0;
-        String leftBlankStr = repeatChar(' ', leftBlankCount);
+        String leftBlankStr = repeatChar(blankChar, leftBlankCount);
         sb.append(leftBlankStr);
         while (true) {
             if (q.peek() == getEndFlag()) {
@@ -112,20 +117,20 @@ public class TreePrinter {
                      * */
                     int leftOffset = current.getLeft().getOffset();
                     // 左子树那个点是空格 所以+1 下划线是从左子树那个点再往右一格开始
-                    sb.append(repeatChar(' ', leftOffset - currentOffset + 1));
+                    sb.append(repeatChar(blankChar, leftOffset - currentOffset + 1));
                     currentOffset = leftOffset + 1;
-                    sb.append(repeatChar('_', thisOffset - currentOffset));
+                    sb.append(repeatChar(underLineChar, thisOffset - currentOffset));
                     currentOffset = thisOffset;
                 }
                 // 输出本身
                 String str = current.printData();
-                sb.append(repeatChar(' ', thisOffset - currentOffset)).append(str);
+                sb.append(repeatChar(blankChar, thisOffset - currentOffset)).append(str);
                 currentOffset = thisOffset + str.length();
 
                 // 有右子树 输出右边的下划线
                 if (current.getRight() != null) {
                     int rightOffset = current.getRight().getOffset();
-                    sb.append(repeatChar('_', rightOffset - currentOffset));
+                    sb.append(repeatChar(underLineChar, rightOffset - currentOffset));
                     currentOffset = rightOffset;
                 }
             }
@@ -142,14 +147,14 @@ public class TreePrinter {
                 BinTreeNode<T, N> left = Objects.requireNonNull(current).getLeft();
                 if (left != null) {
                     int leftOffset = left.getOffset();
-                    sb.append(repeatChar(' ', leftOffset - currentOffset)).append('|');
+                    sb.append(repeatChar(blankChar, leftOffset - currentOffset)).append(verticalChar);
                     currentOffset = leftOffset + 1;
                     q.offer(left);
                 }
                 BinTreeNode<T, N> right = current.getRight();
                 if (right != null) {
                     int rightOffset = right.getOffset();
-                    sb.append(repeatChar(' ', rightOffset - currentOffset)).append('|');
+                    sb.append(repeatChar(blankChar, rightOffset - currentOffset)).append(verticalChar);
                     currentOffset = rightOffset + 1;
                     q.offer(right);
                 }
@@ -158,7 +163,7 @@ public class TreePrinter {
         return sb.toString();
     }
 
-    private static String repeatChar(char ch, int count) {
+    private static String repeatChar(String ch, int count) {
         if (count == 0) {
             return "";
         }
