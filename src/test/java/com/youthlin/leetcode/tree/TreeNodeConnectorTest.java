@@ -13,7 +13,7 @@ public class TreeNodeConnectorTest {
     public void connect() {
         TreeBuilder builder = new TreeBuilder();
         TreeNodeConnector.Node root = builder
-                .buildViaLevelOrder(Arrays.asList(1, 2, 3, 4, 5, null, 7), TreeNodeConnector.Node::new);
+                .buildViaLevelOrder(Arrays.asList(1, 2, 3, 4, 5, null, 7, null, null, 6000, 9), TreeNodeConnector.Node::new);
         System.out.println(TreePrinter.printTree(root));
 
         TreeNodeConnector connector = new TreeNodeConnector();

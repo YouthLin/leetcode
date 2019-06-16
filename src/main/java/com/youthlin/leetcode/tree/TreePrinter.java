@@ -9,44 +9,6 @@ import java.util.Stack;
  * @author : youthlin.chen @ 2019-06-15 20:27
  */
 public class TreePrinter {
-    private static final BinTreeNode END_FLAG = new BinTreeNode() {
-        @Override public void setData(Object data) {
-        }
-
-        @Override public Object getData() {
-            return null;
-        }
-
-        @Override public BinTreeNode getLeft() {
-            return null;
-        }
-
-        @Override public void setLeft(BinTreeNode left) {
-        }
-
-        @Override public BinTreeNode getRight() {
-            return null;
-        }
-
-        @Override public void setRight(BinTreeNode right) {
-        }
-
-        @Override public String printData() {
-            return null;
-        }
-
-        @Override public void setOffset(int offset) {
-        }
-
-        @Override public int getOffset() {
-            return 0;
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    private static <T, N extends BinTreeNode<T, N>> BinTreeNode<T, N> getEndFlag() {
-        return END_FLAG;
-    }
 
     public static <T, N extends BinTreeNode<T, N>> String printTree(BinTreeNode<T, N> root) {
         return printTree(root, 0);
@@ -54,13 +16,14 @@ public class TreePrinter {
 
     public static <T, N extends BinTreeNode<T, N>> String printTree(BinTreeNode<T, N> root, int offset) {
         if (root == null) {
-            return repeatChar(' ', offset);
+            return "";
         }
         int leftBlankCount = offset;
 
-        // 中序遍历 准备工作 计算偏移量
+        // 中序遍历 准备工作 计算每个结点的偏移量
         Stack<BinTreeNode<T, N>> stack = new Stack<>();
-        BinTreeNode<T, N> pre = root;//辅助变量 用于判断偏移量是否需要调整
+        //辅助变量 用于判断偏移量是否需要调整
+        BinTreeNode<T, N> pre = root;
         BinTreeNode<T, N> current = root;
         do {
             //往最左
@@ -206,31 +169,55 @@ public class TreePrinter {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
+    //region static flag
 
-        /*
-         *
-         *
-         *  0123456789
-         *   ____2___
-         *  |        |
-         *  -1__   __3
-         *      | |
-         *     _0 100
-         *    |
-         *    9
-         * */
-        TreeNode<Integer> root = new TreeNode<>(2);
-        TreeNode<Integer> node = new TreeNode<>(-1);
-        root.left = node;
-        node.right = new TreeNode<>(0);
-        node = node.right;
-        node.left = new TreeNode<>(9);
-        node = new TreeNode<>(3);
-        root.right = node;
-        node.left = new TreeNode<>(100);
+    private static final BinTreeNode END_FLAG = new BinTreeNode() {
+        @Override
+        public void setData(Object data) {
+        }
 
-        System.out.println(printTree(root, 0));
-        System.out.println(printTree(root, 10));
+        @Override
+        public Object getData() {
+            return null;
+        }
+
+        @Override
+        public BinTreeNode getLeft() {
+            return null;
+        }
+
+        @Override
+        public void setLeft(BinTreeNode left) {
+        }
+
+        @Override
+        public BinTreeNode getRight() {
+            return null;
+        }
+
+        @Override
+        public void setRight(BinTreeNode right) {
+        }
+
+        @Override
+        public String printData() {
+            return null;
+        }
+
+        @Override
+        public void setOffset(int offset) {
+        }
+
+        @Override
+        public int getOffset() {
+            return 0;
+        }
+    };
+
+    @SuppressWarnings("unchecked")
+    private static <T, N extends BinTreeNode<T, N>> BinTreeNode<T, N> getEndFlag() {
+        return END_FLAG;
     }
+    //endregion static flag
+
 }

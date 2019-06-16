@@ -4,12 +4,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * @author : youthlin.chen @ 2019-06-15 16:02
  */
 public class TreeVisitor {
     //region pre order
+
     public <T, N extends BinTreeNode<T, N>> void preOrderTraversalRecursion(BinTreeNode<T, N> root,
             Consumer<BinTreeNode<T, N>> action) {
         if (root == null) {
@@ -37,6 +39,7 @@ public class TreeVisitor {
     //endregion pre order
 
     //region in order
+
     public <T, N extends BinTreeNode<T, N>> void inOrderTraversalRecursion(BinTreeNode<T, N> root,
             Consumer<BinTreeNode<T, N>> action) {
         if (root == null) {
@@ -66,6 +69,7 @@ public class TreeVisitor {
     //endregion in order
 
     //region post order
+
     public <T, N extends BinTreeNode<T, N>> void postOrderTraversalRecursion(BinTreeNode<T, N> root,
             Consumer<BinTreeNode<T, N>> action) {
         if (root == null) {
@@ -101,12 +105,28 @@ public class TreeVisitor {
     }
     //endregion post order
 
+
     /**
      * @param onLevelEnd 当每层结束时调用 参数是从 0 编号的层数
      */
     public <T, N extends BinTreeNode<T, N>> void levelOrder(N root, Consumer<N> action, Consumer<Integer> onLevelEnd) {
+        levelFullOrder(root, false, action, levelCount -> {
+            onLevelEnd.accept(levelCount);
+            return true;
+        });
+    }
+
+    /**
+     * @param root                 树的根结点
+     * @param visitNullNode        是否访问 null 结点
+     * @param action               访问每个结点
+     * @param shouldVisitNextLevel 是否继续访问下一层
+     * @return true 如果完成了所有结点的访问
+     */
+    public <T, N extends BinTreeNode<T, N>> boolean levelFullOrder(N root, boolean visitNullNode,
+            Consumer<N> action, Predicate<Integer> shouldVisitNextLevel) {
         if (root == null) {
-            return;
+            return false;
         }
         Queue<N> q1 = new LinkedList<>();
         Queue<N> q2 = new LinkedList<>();
@@ -116,18 +136,23 @@ public class TreeVisitor {
             while (!q1.isEmpty()) {
                 root = q1.poll();
                 action.accept(root);
-                if (root.getLeft() != null) {
-                    q2.offer(root.getLeft());
-                }
-                if (root.getRight() != null) {
-                    q2.offer(root.getRight());
+                if (root != null) {
+                    if (root.getLeft() != null || visitNullNode) {
+                        q2.offer(root.getLeft());
+                    }
+                    if (root.getRight() != null || visitNullNode) {
+                        q2.offer(root.getRight());
+                    }
                 }
             }
-            onLevelEnd.accept(level++);
-            Queue<N> q = q1;
+            if (!shouldVisitNextLevel.test(level++)) {
+                return false;
+            }
+            Queue<N> tmp = q1;
             q1 = q2;
-            q2 = q;
-        } while (!q1.isEmpty() || !q2.isEmpty());
+            q2 = tmp;
+        } while (!q1.isEmpty());
+        return true;
     }
 
 }

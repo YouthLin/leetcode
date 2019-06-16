@@ -1,16 +1,18 @@
 package com.youthlin.leetcode.tree;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Queue;
 
 /**
+ * 递归可以解决的二叉树相关问题
+ * - 树的最大深度
+ * - 判断是否对称二叉树
+ * - 判断是否存在路径总和等于给定值
+ *
  * @author : youthlin.chen @ 2019-06-15 16:37
  */
 public class TreeRecursion {
-
     //region 最大深度
 
     /**
@@ -21,8 +23,9 @@ public class TreeRecursion {
     }
 
     private <T> int depth(TreeNode<T> node, int currentDepth) {
-        if (node == null)
+        if (node == null) {
             return currentDepth;
+        }
         int left = depth(node.left, currentDepth + 1);
         int right = depth(node.right, currentDepth + 1);
         return left > right ? left : right;
@@ -40,8 +43,9 @@ public class TreeRecursion {
 
     private <T> boolean check(TreeNode<T> left, TreeNode<T> right) {
         //输入结点本身
-        if (left == null && right == null)
+        if (left == null && right == null) {
             return true;
+        }
         if (left != null && right != null) {
         } else {
             return false;
@@ -78,30 +82,18 @@ public class TreeRecursion {
     }
 
     private <T> boolean check2(TreeNode<T> root) {
-        if (root == null)
+        if (root == null) {
             return true;
-        Queue<TreeNode<T>> q1 = new LinkedList<>();
-        Queue<TreeNode<T>> q2 = new LinkedList<>();
-        q1.offer(root);
+        }
         List<T> level = new ArrayList<>();
-        do {
-            level.clear();
-            while (!q1.isEmpty()) {
-                root = q1.poll();
-                level.add(root != null ? root.data : null);
-                if (root != null) {
-                    q2.offer(root.left);
-                    q2.offer(root.right);
+        return new TreeVisitor().levelFullOrder(root, true,
+                node -> level.add(node != null ? node.data : null),
+                levelCount -> {
+                    boolean ok = checkLevel(level);
+                    level.clear();
+                    return ok;
                 }
-            }
-            if (!checkLevel(level)) {
-                return false;
-            }
-            Queue<TreeNode<T>> tmp = q1;
-            q1 = q2;
-            q2 = tmp;
-        } while (!q1.isEmpty());
-        return true;
+        );
     }
 
     /**
@@ -109,8 +101,9 @@ public class TreeRecursion {
      */
     private <T> boolean checkLevel(List<T> level) {
         int size = level.size();
-        if (size != 1 && size % 2 != 0)
+        if (size != 1 && size % 2 != 0) {
             return false;
+        }
         int mid = size >> 1;
         for (int i = 0; i < mid; i++) {
             if (!Objects.equals(level.get(i), level.get(size - i - 1))) {
@@ -123,13 +116,15 @@ public class TreeRecursion {
     //endregion 对称判断
 
     //region 路径总和
+
     public boolean hasPathSum(TreeNode<Integer> root, int sum) {
         return checkHasPathSum(root, 0, sum);
     }
 
     private boolean checkHasPathSum(TreeNode<Integer> node, int current, int target) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node.left == node.right && node.left == null) {
             return current + node.data == target;
         }

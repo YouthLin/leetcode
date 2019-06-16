@@ -1,7 +1,10 @@
 package com.youthlin.leetcode.tree;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 /**
  * @author : youthlin.chen @ 2019-06-15 16:52
@@ -61,22 +64,28 @@ public class TreeRecursionTest extends TreeTestBase {
     @Test
     public void maxDepth() {
         System.out.println(test.maxDepth(root));
+        Assert.assertEquals(4, test.maxDepth(root));
+        Assert.assertEquals(3, test.maxDepth(symmetric));
     }
 
     @Test
     public void isSymmetric() {
-        System.out.println(test.isSymmetric(root));
-        System.out.println(test.isSymmetric(symmetric));
+        Assert.assertFalse(test.isSymmetric(root));
+        Assert.assertTrue(test.isSymmetric(symmetric));
     }
 
     @Test
     public void isSymmetricByLevel() {
-        System.out.println(test.isSymmetricByLevel(root));
-        System.out.println(test.isSymmetricByLevel(symmetric));
+        Assert.assertFalse(test.isSymmetricByLevel(root));
+        Assert.assertTrue(test.isSymmetricByLevel(symmetric));
     }
 
     @Test
     public void hasPathSum() {
         System.out.println(test.hasPathSum(root, 22));
+        Integer[] level = {3, 5, 1, 6, 2, 0, 8, null, null, 7, 4};
+        root = new TreeBuilder().buildViaLevelOrder(Arrays.asList(level));
+        Assert.assertTrue(test.hasPathSum(root, 17));
+        Assert.assertTrue(test.hasPathSum(root, 14));
     }
 }

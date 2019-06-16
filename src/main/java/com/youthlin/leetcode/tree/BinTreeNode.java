@@ -8,13 +8,14 @@ package com.youthlin.leetcode.tree;
  * @author : youthlin.chen @ 2019-06-15 22:06
  */
 public interface BinTreeNode<T, N extends BinTreeNode<T, N>> {
+
     void setData(T data);
 
     T getData();
 
-    N getLeft();
-
     void setLeft(N left);
+
+    N getLeft();
 
     N getRight();
 
