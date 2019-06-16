@@ -117,12 +117,12 @@ public class TreeVisitor {
 
     /**
      * @param root                 树的根结点
-     * @param visitNullNode        是否访问 null 结点
-     * @param action               访问每个结点
+     * @param visitLeaf            是否访问叶子结点
+     * @param action               访问每个结点的动作
      * @param shouldVisitNextLevel 是否继续访问下一层 输入是从 0 开始的层数 通常用于每层结束后做一些事 并且允许提前结束遍历
      * @return true 如果完成了所有结点的访问
      */
-    public <T, N extends BinTreeNode<T, N>> boolean levelOrder(N root, boolean visitNullNode,
+    public <T, N extends BinTreeNode<T, N>> boolean levelOrder(N root, boolean visitLeaf,
             Consumer<N> action, Predicate<Integer> shouldVisitNextLevel) {
         if (root == null) {
             return false;
@@ -136,10 +136,10 @@ public class TreeVisitor {
                 root = q1.poll();
                 action.accept(root);
                 if (root != null) {
-                    if (root.getLeft() != null || visitNullNode) {
+                    if (root.getLeft() != null || visitLeaf) {
                         q2.offer(root.getLeft());
                     }
-                    if (root.getRight() != null || visitNullNode) {
+                    if (root.getRight() != null || visitLeaf) {
                         q2.offer(root.getRight());
                     }
                 }

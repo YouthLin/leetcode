@@ -18,9 +18,9 @@ public class TreeBuilder {
     }
 
     public <T> TreeNode<T> buildTreeViaPreInOrder(T[] preOrder, T[] inOrder) {
-        Wrapper<Integer> postIndex = new Wrapper<>();
-        postIndex.setData(0);
-        return buildNodePreInOrder(preOrder, inOrder, 0, inOrder.length, postIndex);
+        Wrapper<Integer> preIndex = new Wrapper<>();
+        preIndex.setData(0);
+        return buildNodePreInOrder(preOrder, inOrder, 0, inOrder.length, preIndex);
     }
 
     /**
