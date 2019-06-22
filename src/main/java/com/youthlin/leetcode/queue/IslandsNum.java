@@ -49,7 +49,7 @@ public class IslandsNum {
      * 队列版本 这里也可以用递归实现 见下方解法
      */
     private static void process(char[][] grid, int rowCount, int columnCount, int i, int j) {
-        grid[i][j] = '0';
+        grid[i][j] = ' ';
         Queue<Integer> q = new LinkedList<>();
         int index = i * columnCount + j;
         q.offer(index);
@@ -112,8 +112,8 @@ public class IslandsNum {
     private static void printGrid(char[][] grid) {
         for (char[] row : grid) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < row.length; i++) {
-                if (row[i] == '1') {
+            for (char c : row) {
+                if (c == '1') {
                     sb.append('1');
                 } else {
                     sb.append(' ');
