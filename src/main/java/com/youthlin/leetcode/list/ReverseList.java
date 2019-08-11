@@ -89,16 +89,48 @@ public class ReverseList {
         return preStart;
     }
 
+    public static <T> Node<T> reverseByGroup(Node<T> head, int k) {
+        Node<T> rest = head;
+        for (int i = 1; i < k && rest != null; i++) {
+            rest = rest.getNext();
+        }
+        if (rest == null) {
+            return head;
+        }
+        Node<T> next = rest.getNext();
+        rest.setNext(null);
+        Node<T> reversedHead = reverse(head);
+        Node<T> reversedNext = reverseByGroup(next, k);
+        head.setNext(reversedNext);
+        return reversedHead;
+    }
+
+    public static <T> Node<T> reverseByGroupFromTail1(Node<T> head, int k) {
+        head = reverse(head);
+        head = reverseByGroup(head, k);
+        return reverse(head);
+    }
+
     public static void main(String[] args) {
         Node<Integer> head = Node.of(1, 2, 3, 4, 5, 6, 7, 8);
         System.out.println("input          = " + head);
         System.out.println("reverse        = " + reverse(head));
+
         head = Node.of(1, 2, 3, 4, 5, 6, 7, 8);
-        System.out.println("input          = " + head);
         System.out.println("reverseByGroup2= " + reverseByGroupFromTail(head, 2));
+
         head = Node.of(1, 2, 3, 4, 5, 6, 7, 8);
-        System.out.println("input          = " + head);
         System.out.println("reverseByGroup3= " + reverseByGroupFromTail(head, 3));
+
+        System.out.println("==========递归版本======================");
+        head = Node.of(1, 2, 3, 4, 5, 6, 7, 8);
+        System.out.println("reverseByGroup2= " + reverseByGroup(head, 2) + " (FromHead");
+        head = Node.of(1, 2, 3, 4, 5, 6, 7, 8);
+        System.out.println("reverseByGroup3= " + reverseByGroup(head, 3) + " (FromHead");
+        head = Node.of(1, 2, 3, 4, 5, 6, 7, 8);
+        System.out.println("reverseByGroup2= " + reverseByGroupFromTail1(head, 2));
+        head = Node.of(1, 2, 3, 4, 5, 6, 7, 8);
+        System.out.println("reverseByGroup3= " + reverseByGroupFromTail1(head, 3));
     }
 
 }
