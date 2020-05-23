@@ -7,18 +7,40 @@ public class Arrays {
     public static void main(String[] args) {
         int[] a = {1, 2, 3, 0, 0, 0};
         int[] b = {2, 5, 6};
-        merge(a, 3, b, b.length);
+        merge1(a, 3, b, b.length);
         System.out.println(java.util.Arrays.toString(a));
         a = new int[]{0};
         b = new int[]{1};
-        merge(a, 0, b, 1);
+        merge1(a, 0, b, 1);
         System.out.println(java.util.Arrays.toString(a));
 
         a = new int[]{4, 5, 6, 0, 0, 0};
         b = new int[]{1, 2, 3};
-        merge(a, 3, b, 3);
+        merge1(a, 3, b, 3);
         System.out.println(java.util.Arrays.toString(a));
 
+    }
+
+    /*** 从 nums1 结尾开始 */
+    public static void merge1(int[] nums1, int m, int[] nums2, int n) {
+        // 从后往前放
+        int index = m + n - 1;
+        int p1 = m - 1, p2 = n - 1;
+        while (p2 >= 0 && p1 >= 0) {
+            /* nums1 = [1,2,3,0,0,0], m = 3
+             * nums2 = [2,5,6],       n = 3
+             * */
+            if (nums2[p2] >= nums1[p1]) {
+                nums1[index--] = nums2[p2--];
+            } else {
+                nums1[index--] = nums1[p1--];
+            }
+        }
+        // 4,5,6,0,0,0
+        // 1,2,3
+        while (p2 >= 0) {
+            nums1[index--] = nums2[p2--];
+        }
     }
 
     /**
