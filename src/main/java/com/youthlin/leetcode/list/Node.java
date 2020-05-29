@@ -16,6 +16,7 @@ public class Node<T> {
     private T data;
     private Node<T> next;
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(String.valueOf(data));
         Node<T> n = next;

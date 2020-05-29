@@ -32,9 +32,9 @@ public class Strings {
     }
 
     public static void main(String[] args) {
-        System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
-        System.out.println(isPalindrome("race a car"));
-        System.out.println(isPalindrome("."));
+        System.out.println(isPalindrome1("A man, a plan, a canal: Panama"));
+        System.out.println(isPalindrome1("race a car"));
+        System.out.println(isPalindrome1("."));
 
         test(Integer.MAX_VALUE + "");
         test(Integer.MIN_VALUE + "");
@@ -188,27 +188,33 @@ public class Strings {
         return s1.equals(sb.reverse().toString());
     }
 
-    public static boolean isPalindromeError(String s) {
+    public static boolean isPalindrome1(String s) {
         if (s == null || s.trim().length() == 0) return true;
         int len = s.length();
         s = s.toLowerCase();
         int i = 0, j = len - 1;
         char left, right;
-        while (i <= j) {
-            do {
-                left = s.charAt(i++);
-            } while (i < len && !isAlphaOrDigit(left));
-            do {
-                right = s.charAt(j--);
-            } while (0 <= j && !isAlphaOrDigit(right));
-            if (i > j) return true;
-            if (i == j) return left == right;
+        // .
+        // .,
+        // aba
+        while (i < j) {
+            left = s.charAt(i);
+            if (!isAlphaOrDigit(left)) {
+                i++;
+                continue;
+            }
+            right = s.charAt(j);
+            if (!isAlphaOrDigit(right)) {
+                j--;
+                continue;
+            }
             if (left != right) {
                 return false;
             }
+            i++;
+            j--;
         }
-        return false;
-
+        return true;
     }
 
     private static boolean isAlphaOrDigit(char ch) {
