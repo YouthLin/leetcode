@@ -2,6 +2,8 @@ package com.youthlin.leetcode.str;
 
 import java.math.BigInteger;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -32,6 +34,7 @@ public class Strings {
     }
 
     public static void main(String[] args) {
+        System.out.println(firstUniqChar1("leetcode"));
         System.out.println(isPalindrome1("A man, a plan, a canal: Panama"));
         System.out.println(isPalindrome1("race a car"));
         System.out.println(isPalindrome1("."));
@@ -220,4 +223,46 @@ public class Strings {
     private static boolean isAlphaOrDigit(char ch) {
         return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9');
     }
+
+    /**
+     * 给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 -1。
+     * 注意事项：您可以假定该字符串只包含小写字母。
+     */
+    public static int firstUniqChar(String s) {
+        int length = s.length();
+        LinkedHashMap<Character, Integer> map = new LinkedHashMap<>(length);
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < length; i++) {
+            char ch = chars[i];
+            if (map.containsKey(ch)) {
+                map.put(ch, null);
+            } else {
+                map.put(ch, i);
+            }
+        }
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() != null) {
+                return entry.getValue();
+            }
+        }
+        return -1;
+    }
+
+    public static int firstUniqChar1(String s) {
+        int result = s.length();
+        // 只包含小写字母: 反向思维：遍历所有字母
+        for (int i = 'a'; i <= 'z'; i++) {
+            int index1 = s.indexOf(i);
+            if (index1 < 0) {
+                continue;
+            }
+            int index2 = s.lastIndexOf(i);
+            // 如果只出现一次则 index1==index2
+            if (index1 == index2) {
+                result = Math.min(result, index1);
+            }
+        }
+        return result == s.length() ? -1 : result;
+    }
+
 }
