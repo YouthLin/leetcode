@@ -5,20 +5,9 @@ package com.youthlin.leetcode.arrays;
  */
 public class Arrays {
     public static void main(String[] args) {
-        int[] a = {1, 2, 3, 0, 0, 0};
-        int[] b = {2, 5, 6};
-        merge1(a, 3, b, b.length);
-        System.out.println(java.util.Arrays.toString(a));
-        a = new int[]{0};
-        b = new int[]{1};
-        merge1(a, 0, b, 1);
-        System.out.println(java.util.Arrays.toString(a));
-
-        a = new int[]{4, 5, 6, 0, 0, 0};
-        b = new int[]{1, 2, 3};
-        merge1(a, 3, b, 3);
-        System.out.println(java.util.Arrays.toString(a));
-
+        int[] nums = {0, 0, 1};
+        moveZeroes(nums);
+        System.out.println(java.util.Arrays.toString(nums));
     }
 
     /*** 从 nums1 结尾开始 */
@@ -112,4 +101,46 @@ public class Arrays {
         }
     }
 
+    /**
+     * 将数组的0移动到末尾，保持其他元素到相对顺序
+     * 0 1 2 0 3 4
+     * 1 2 3 4 0 0
+     */
+    public static void moveZeroes(int[] nums) {
+        int zeros = 0;
+        int len = nums.length;
+        // 0,1,0,3,12
+        for (int i = 0; i < len - 1 - zeros; ) {
+            if (nums[i] == 0) {
+                zeros++;
+                System.arraycopy(nums, i + 1, nums, i, len - 1 - i);
+                // 1 0 3 12 12   o=1
+                // 1 3 12 12 12  o=2
+            } else {
+                i++;
+            }
+        }
+        // 1 3 12 0 0
+        for (int i = nums.length - 1; i > nums.length - 1 - zeros; i--) {
+            nums[i] = 0;
+        }
+    }
+
+    public static void moveZeroes1(int[] nums) {
+        int nonZeroIndex = 0;
+        int len = nums.length;
+        // 0 1 0 3 4
+        for (int i = 0; i < len; i++) {
+            if (nums[i] != 0) {
+                nums[nonZeroIndex++] = nums[i];
+                // 1 1 0 3 4 . i = 1,nonZeroIndex=0, ++> 1
+                // 1 3 0 3 4 . i = 3,nonZeroIndex=1, ++> 2
+                // 1 3 4 3 4 . i = 4,nonZeroIndex=2, ++> 3
+            }
+        }
+        // 1 3 4 0 0
+        for (int i = nonZeroIndex; i < len; i++) {
+            nums[i] = 0;
+        }
+    }
 }
