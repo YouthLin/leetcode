@@ -1,5 +1,7 @@
 package com.youthlin.leetcode.arrays;
 
+import java.util.Random;
+
 /**
  * @author youthlin.chen @ 2020-05-21 22:30:56
  */
@@ -143,4 +145,44 @@ public class Arrays {
             nums[i] = 0;
         }
     }
+
+    private static class Shuffle {
+        private static final Random RANDOM = new Random(System.currentTimeMillis());
+        private final int[] original;
+        private int[] nums;
+
+        Shuffle(int[] input) {
+            this.original = input.clone();
+            this.nums = input.clone();
+        }
+
+        /*** 洗牌算法 i = 0 时 randIndex 有 len 种可能， i = 1 时有 len - 1 种，一共 n！ 就是所有的排列组合情况 */
+        private int[] shuffle() {
+            for (int i = 0, len = nums.length; i < len; i++) {
+                int randIndex = randClosedOpen(i, len);
+                swap(nums, i, randIndex);
+            }
+            return nums.clone();
+        }
+
+        private int[] reset() {
+            return original.clone();
+        }
+
+        private static void swap(int[] arr, int i, int j) {
+            int tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+
+        private static int randClosedOpen(int min, int max) {
+            // nextInt(n) => [0,n)
+            // nextInt(max)+min => [0,max)+min => [min,min+max)
+            // nextInt(max-min) => [0,max-min)
+            // nextInt(max-min)+min => [0,max-min)+min => [min,max)
+            // nextInt(max-min+1)+min => [min,max]
+            return RANDOM.nextInt(max - min) + min;
+        }
+    }
+
 }
