@@ -1,5 +1,9 @@
 package com.youthlin.leetcode.arrays;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -183,6 +187,25 @@ public class Arrays {
             // nextInt(max-min+1)+min => [min,max]
             return RANDOM.nextInt(max - min) + min;
         }
+    }
+
+    /*** 数组交集 出现次数一致的元素 https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/ */
+    public static int[] intersect(int[] nums1, int[] nums2) {
+        // nums -> count
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums1) {
+            int old = map.getOrDefault(num, 0);
+            map.put(num, old + 1);
+        }
+        List<Integer> result = new LinkedList<>();
+        for (int num : nums2) {
+            int count = map.getOrDefault(num, 0);
+            if (count > 0) {
+                result.add(num);
+                map.put(num, count - 1);
+            }
+        }
+        return result.stream().mapToInt(x -> x).toArray();
     }
 
 }
