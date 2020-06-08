@@ -29,7 +29,7 @@ public class TreeBuilder {
      * @param <T> 结点值类型
      */
     public <T> TreeNode<T> buildViaFullLevelOrder(Iterable<T> input) {
-        return buildViaFullLevelOrder(input, TreeNode::new);
+        return buildViaFullLevelOrder(input, (Function<T, TreeNode<T>>) TreeNode::new);
     }
 
     /**
