@@ -91,7 +91,7 @@ public class TreeBuilder {
      *
      * @param <T> node value type
      * @param <N> node type
-     */
+     *//*
     public <T, N extends BinTreeNode<T, N>> N buildLevelOrder(Iterable<T> input, Supplier<N> creator) {
         return buildLevelOrder(input, in -> {
             N node = creator.get();
@@ -99,6 +99,7 @@ public class TreeBuilder {
             return node;
         });
     }
+    */
 
     /**
      * 输入是按层次遍历的顺序 空结点用 null 表示(所以结点的 data 值永远不能为 null)
