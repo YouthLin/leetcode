@@ -9,6 +9,7 @@ import java.util.Map;
 
 /**
  * 邻接表
+ * 稀疏图、顶点较多，即图结构比较大时，更适宜选择邻接表
  *
  * @author youthlin.chen @ 2020-06-09 20:29:51
  */
@@ -140,6 +141,11 @@ public class AdjacencyList<K, V> {
         // 3: 1->2->4->5
         // 4: 1->3
         // 5: 3
+        //    1
+        //   /|\
+        //  2-3-4
+        //    |
+        //    5
         edgeList = new ArrayList<>();
         edgeList.add(SimpleEdge.of(one, two));
         edgeList.add(SimpleEdge.of(one, three));
