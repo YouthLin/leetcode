@@ -1,29 +1,27 @@
 package com.youthlin.leetcode.graph;
 
-import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 图的边
  *
  * @author youthlin.chen @ 2020-06-09 20:46:47
  */
-public interface Edge<K, V> extends Map.Entry<Vertex<K, V>, Vertex<K, V>> {
-    Vertex<K, V> getFrom();
+@Data
+@AllArgsConstructor(staticName = "of")
+@RequiredArgsConstructor(staticName = "of")
+public class Edge<T> {
+    @NonNull
+    private final Vertex<T> from;
+    @NonNull
+    private final Vertex<T> to;
+    private double weight;
 
-    Vertex<K, V> getTo();
-
-    @Override
-    default Vertex<K, V> getKey() {
-        return getFrom();
+    public Edge<T> reverse() {
+        return Edge.of(to, from, weight);
     }
 
-    @Override
-    default Vertex<K, V> getValue() {
-        return getTo();
-    }
-
-    @Override
-    default Vertex<K, V> setValue(Vertex<K, V> value) {
-        throw new UnsupportedOperationException();
-    }
 }

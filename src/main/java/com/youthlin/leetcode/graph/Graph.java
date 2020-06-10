@@ -1,14 +1,30 @@
 package com.youthlin.leetcode.graph;
 
-import java.util.Collection;
-
 /**
  * 图
  *
  * @author youthlin.chen @ 2020-06-09 22:13:22
  */
-public interface Graph<K, V> {
-    /*** 获取指定顶点的边集合 */
-    Collection<Edge<K, V>> getEdges(Vertex<K, V> vertex);
+public interface Graph<T> {
+    /*** 顶点个数 */
+    int vertexSize();
+
+    /*** 边的条数 */
+    int edgeSize();
+
+    /*** 添加一个顶点 */
+    boolean addVertex(Vertex<T> vertex);
+
+    /*** 添加一条边 */
+    boolean addEdge(Edge<T> edge);
+
+    /*** 移除一条边 */
+    boolean removeEdge(Edge<T> edge);
+
+    /*** 返回指定顶点出发的所有边 */
+    Iterable<Edge<T>> edges(Vertex<T> vertex);
+
+    /*** 返回所有边 */
+    Iterable<Edge<T>> edges();
 
 }

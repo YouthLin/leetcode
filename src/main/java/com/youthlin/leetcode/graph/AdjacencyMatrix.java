@@ -6,6 +6,7 @@ package com.youthlin.leetcode.graph;
  *
  * @author youthlin.chen @ 2020-06-09 21:36:46
  */
-public class AdjacencyMatrix {
+public class AdjacencyMatrix<T> {
+
 
 }
