@@ -11,8 +11,8 @@ import java.util.Random;
  */
 public class Arrays {
     public static void main(String[] args) {
-        int[] nums = {0, 0, 1};
-        moveZeroes(nums);
+        int[] nums = {2, 4, 5, 1, 6};
+        quickSort(nums);
         System.out.println(java.util.Arrays.toString(nums));
     }
 
@@ -206,6 +206,46 @@ public class Arrays {
             }
         }
         return result.stream().mapToInt(x -> x).toArray();
+    }
+
+    public static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+
+    private static void quickSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int index = quickSortPartition(arr, left, right);
+            quickSort(arr, left, index - 1);
+            quickSort(arr, index + 1, right);
+        }
+    }
+
+    private static int quickSortPartition(int[] arr, int left, int right) {
+        // base, less0, less1, less2, gt, gt, gt
+        //       ^-index
+        //                   ^-index
+        // less2, less0, less1, base, gt, gt, gt
+
+        // index 是比 base 小的数要放置在的位置
+        int index = left + 1;
+        for (int i = index; i <= right; i++) {
+            if (arr[i] < arr[left]) {
+                swap(arr, i, index);
+                index++;
+            }
+        }
+        // index - 1 是最后一个比 base 小的 这里导致不稳定
+        swap(arr, left, index - 1);
+        return index - 1;
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        if (i == j) {
+            return;
+        }
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
     }
 
 }
